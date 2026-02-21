@@ -201,14 +201,11 @@ zipfile.ZipInfo._encodeFilenameFlags = _newEncodeFilenameFlags
 menu_map = {
         'memua': '/',                     # Home
         'memuasite': '/site',             # Website
-        'memuawptoolkit': '/wp/toolkit',  # WP Toolkit
         'memuaftp': '/ftp',               # FTP
         'memuadatabase': '/database',     # Databases
         'memudocker': '/docker',          # Docker
         'memuacontrol': '/control',       # Monitor
         'memuafirewall': '/firewall',     # Security
-        'memu_btwaf': '/btwaf',           # Waf
-        'memu_mailsys': '/mail',          # Mail Server
         'memuafiles': '/files',           # Files
         'menunode': '/node',              # Node Management
         'memualogs': '/logs',             # Logs

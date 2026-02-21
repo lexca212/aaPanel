@@ -2536,6 +2536,30 @@ var system = {
 		$('.purchaseSystem').unbind('click').on('click',function (){
 			bt.soft.updata_ltd(true);
 		});
+
+		$('#quickOpenVarLog').off('click').on('click', function () {
+			openPath('/var/log');
+		});
+
+		$('#quickViewSshLog').off('click').on('click', function () {
+			that.openCommandPanel('SSH Log', "if [ -f /var/log/auth.log ]; then tail -n 200 /var/log/auth.log; elif [ -f /var/log/secure ]; then tail -n 200 /var/log/secure; else journalctl -u ssh -u sshd -n 200 --no-pager 2>/dev/null || echo 'SSH log not found'; fi");
+		});
+
+		$('#quickViewSystemLog').off('click').on('click', function () {
+			that.openCommandPanel('System Log', "if [ -f /var/log/syslog ]; then tail -n 200 /var/log/syslog; elif [ -f /var/log/messages ]; then tail -n 200 /var/log/messages; else journalctl -n 200 --no-pager 2>/dev/null || echo 'System log not found'; fi");
+		});
+
+		$('#quickFail2banStatus').off('click').on('click', function () {
+			that.openCommandPanel('Fail2Ban Status', "if command -v fail2ban-client >/dev/null 2>&1; then fail2ban-client status; systemctl status fail2ban --no-pager -l | head -n 80; else echo 'Fail2Ban is not installed'; fi");
+		});
+
+		$('#quickFail2banInstall').off('click').on('click', function () {
+			that.openCommandPanel('Install/Enable Fail2Ban', "if ! command -v fail2ban-client >/dev/null 2>&1; then if command -v apt-get >/dev/null 2>&1; then apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y fail2ban; elif command -v yum >/dev/null 2>&1; then yum install -y fail2ban || dnf install -y fail2ban; else echo 'No supported package manager found'; fi; fi; systemctl enable fail2ban --now 2>/dev/null || service fail2ban start; fail2ban-client status");
+		});
+
+		$('#quickFail2banDisable').off('click').on('click', function () {
+			that.openCommandPanel('Disable Fail2Ban', "systemctl disable --now fail2ban 2>/dev/null || service fail2ban stop; if command -v fail2ban-client >/dev/null 2>&1; then fail2ban-client status || true; else echo 'Fail2Ban is not installed'; fi");
+		});
 	},
 
 	/**
@@ -2553,6 +2577,23 @@ var system = {
 				this.reinforceLog();
 				break;
 		}
+	},
+
+	openCommandPanel: function (title, shell) {
+		var cid = 'security_cmd_' + Date.now();
+		bt_tools.open({
+			title: title,
+			area: ['900px', '560px'],
+			btn: false,
+			content: '<div class="pd15" style="height:100%"><pre id="' + cid + '" class="command_output_pre" style="height:480px;background:#111;color:#f5f5f5;padding:10px;overflow:auto;"></pre></div>',
+			success: function () {
+				bt_tools.command_line_output({
+					el: '#' + cid,
+					shell: shell,
+					time: 120000
+				});
+			}
+		});
 	},
 
 	/**
