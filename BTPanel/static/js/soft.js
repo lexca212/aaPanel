@@ -32,7 +32,7 @@ var soft = {
           // } else if (rdata.pro === -1) {
           //   $("#updata_pro_info").html('<div class="alert alert-success" style="margin-bottom:15px"><strong > ' + lan.soft.upgrade_pro + '</strong><button class="btn btn-success btn-xs va0 updata_pro" onclick="bt.soft.updata_pro()" title="' + lan.soft.upgrade_pro_now + '" style="margin-left:8px">' + lan.soft.upgrade_now + '</button>\</div>');
           // }
-          soft.set_soft_tips(rdata,type);
+          soft.clear_soft_tips();
 
           // if (type == 10) {
           //   $("#updata_pro_info").html('<div class="alert alert-danger" style="margin-bottom:15px"><strong>' + lan.soft.bt_developer + '</strong><a class="btn btn-success btn-xs va0" href="https://www.aapanel.com" title="' + lan.soft.get_third_party_apps + '" style="margin-left: 8px" target="_blank">' + lan.soft.get_third_party_apps + '</a><input type="file" style="display:none;" accept=".zip,.tar.gz" id="update_zip" multiple="multiple"><button class="btn btn-success btn-xs" onclick="soft.update_zip_open()" style="margin-left:8px">' + lan.soft.import_plug + '</button></div>')
@@ -46,9 +46,8 @@ var soft = {
               if (istype == rdata.type[i].id) {
                   c = 'class="on"';
               }
-              // 注释软件管理的付费插件，第三方插件，一键部署
-              // if (rdata.type[i].id != "11" && rdata.type[i].id != "10" && rdata.type[i].id != "8") {
-              if (rdata.type[i].id != "11") {
+              // Hide categories that mainly contain promotions/paid items.
+              if (rdata.type[i].id != "11" && rdata.type[i].id != "8") {
                   tBody += '<span typeid="' + rdata.type[i].id + '" ' + c + '>' + rdata.type[i].title + '</span>';
               }
           }
@@ -329,19 +328,8 @@ var soft = {
                                     buy_type = 32;
                                     break;
                             }
-                            if (item.type != 10) {
-                                pay_opt = '<a class="btlink" onclick=\'bt.soft.product_pay_view('+ JSON.stringify({
-                                    name:item.title,
-                                    pid:item.pid,
-                                    type:item.type,
-                                    plugin:true,
-                                    renew:item.endtime,
-                                    totalNum:buy_type,
-																		ps: item.ps
-                                }) +')\'>' + re_msg + '</a>';
-                            } else {
-                                pay_opt = '<a class="btlink" onclick="bt.soft.re_plugin_pay_other(\'' + item.title + '\',\'' + item.pid + '\',' + re_status + ',' + item.price + ')">' + re_msg + '</a>';
-                            }
+                            // Intentionally keep paid actions hidden from the software list.
+                            pay_opt = '';
 
                         }
                         var is_php = item.name.indexOf('php-') >= 0,
@@ -470,6 +458,9 @@ var soft = {
 			$('.soft-filter-box .soft-search').after('<span style="display:inline-block; margin-left:10px;margin-top:8px;vertical-align: bottom;" class="feedback-btn"><span class="flex" style="align-items: center;margin-right:16px;width:100px;"><i class="icon-demand"></i><a class="btlink" onClick="javascript:bt.openFeedback({title:\'aaPanel demand feedback collection\',placeholder:\'<span>If you encounter any problems or imperfect functions during use, please describe <br> your problems or needs to us in detail, we will try our best to solve or improve for <br> you</span>\',recover:\'We pay special attention to your requirements feedback, and we conduct regular weekly requirements reviews. I hope I can help you better\',key:993,proType:2});" style="margin-left: 10px;">Feedback</a></span></span>');
 			
 				}
+    },
+    clear_soft_tips: function () {
+        $('#updata_pro_info').empty();
     },
     // 渲染列表
     render_promote_list:function(data){
