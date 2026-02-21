@@ -257,6 +257,24 @@
 	border-right: 1px solid #ececec;
 }
 /* end */
+
+.security-tools-box {
+	border: 1px solid #e8e8e8;
+	border-radius: 4px;
+	padding: 12px 15px;
+	margin-bottom: 12px;
+	background: #fafafa;
+}
+.security-tools-box .tools-title {
+	font-size: 14px;
+	font-weight: bold;
+	color: #333;
+	margin-bottom: 8px;
+}
+.security-tools-box .tools-actions .btn {
+	margin-right: 8px;
+	margin-bottom: 8px;
+}
 /* 系统加固 */
 #system .divtable {
 	margin: 0;
@@ -699,6 +717,17 @@
 				</div>
 			</div>
 			<div class="tab-con hide" id="system">
+				<div class="security-tools-box">
+					<div class="tools-title">Security Tools (Logs & Fail2Ban)</div>
+					<div class="tools-actions">
+						<button class="btn btn-default btn-sm" id="quickViewSshLog">SSH Log</button>
+						<button class="btn btn-default btn-sm" id="quickViewSystemLog">System Log</button>
+						<button class="btn btn-default btn-sm" id="quickOpenVarLog">Open /var/log</button>
+						<button class="btn btn-success btn-sm" id="quickFail2banStatus">Fail2Ban Status</button>
+						<button class="btn btn-success btn-sm" id="quickFail2banInstall">Install/Enable Fail2Ban</button>
+						<button class="btn btn-warning btn-sm" id="quickFail2banDisable">Disable Fail2Ban</button>
+					</div>
+				</div>
 				<div class="tab-nav-border">
 					<span class="on">{{ data['lan']['SH2'] }}</span>
 					<span>{{ data['lan']['SH3'] }}</span>

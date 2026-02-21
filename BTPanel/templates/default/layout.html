@@ -849,16 +849,8 @@
 					});
 				}
 
-				if (bt.get_cookie('bt_user_info') == null || bt.get_cookie('bt_user_info') == '') {
-					bt.pub.get_user_info(function (userInfo) {
-						if (userInfo.status) {
-							bt.set_cookie('bt_user_info', JSON.stringify(userInfo));
-							getPaymentStatus();
-						}
-					});
-				} else {
-					getPaymentStatus();
-				}
+				// Hide paid-edition promotion area from the top navigation.
+				// Keep this disabled to provide a cleaner, ad-free panel UI.
 			</script>
 			{% endblock %}
 			<script type="text/javascript">
