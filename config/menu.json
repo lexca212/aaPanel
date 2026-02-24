@@ -49,6 +49,13 @@
     "sort": 7
   },
   {
+    "title": "Security2",
+    "href": "/security/firewall",
+    "class": "menu_firewall",
+    "id": "memuAsecurity2",
+    "sort": 8
+  },
+  {
     "title": "Files",
     "href": "/files",
     "class": "menu_folder",
