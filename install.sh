@@ -35,6 +35,8 @@ setup_path="/www"
 python_bin=$setup_path/server/panel/pyenv/bin/python
 cpu_cpunt=$(cat /proc/cpuinfo | grep ^processor | wc -l)
 panelPort=$(expr $RANDOM % 55535 + 10000)
+AAPANEL_REPO_URL=${AAPANEL_REPO_URL:-}
+AAPANEL_REPO_BRANCH=${AAPANEL_REPO_BRANCH:-main}
 if [ "$1" ]; then
     IDC_CODE=$1
 fi
@@ -1603,18 +1605,47 @@ Install_Bt() {
     fi
 
     panel_file="${setup_path}/panel.zip"
-    wget --no-check-certificate -O ${panel_file} ${download_Url}/install/src/panel_7_en.zip -t 5 -T 20
+    if [ -n "${AAPANEL_REPO_URL}" ]; then
+        echo "Using custom aaPanel repo: ${AAPANEL_REPO_URL} (branch: ${AAPANEL_REPO_BRANCH:-main})"
+        if ! Command_Exists git; then
+            if Command_Exists yum; then
+                yum install git -y
+            else
+                apt-get update -y && apt-get install git -y
+            fi
+        fi
+        rm -rf /tmp/aapanel-src /tmp/aapanel-pkg
+        git clone --depth 1 -b "${AAPANEL_REPO_BRANCH:-main}" "${AAPANEL_REPO_URL}" /tmp/aapanel-src
+        if [ $? -ne 0 ]; then
+            Red_Error "ERROR: Failed to clone custom repo: ${AAPANEL_REPO_URL}"
+        fi
+        if [ ! -f "/tmp/aapanel-src/BTPanel/__init__.py" ]; then
+            Red_Error "ERROR: Custom repo does not look like aaPanel source (missing BTPanel/__init__.py)"
+        fi
+        mkdir -p /tmp/aapanel-pkg/panel
+        cp -arf /tmp/aapanel-src/. /tmp/aapanel-pkg/panel/
+        cd /tmp/aapanel-pkg && zip -qr ${panel_file} panel
+        cd ~
+    else
+        wget --no-check-certificate -O ${panel_file} ${download_Url}/install/src/panel_7_en.zip -t 5 -T 20
+    fi
 
     tmp_size=$(du -b ${panel_file} | awk '{print $1}')
-    if [ $tmp_size -lt 10026905 ]; then
+    min_size=10026905
+    if [ -n "${AAPANEL_REPO_URL}" ]; then
+        min_size=102400
+    fi
+    if [ $tmp_size -lt $min_size ]; then
         ls -lh ${panel_file}
         rm -f ${panel_file}
-        Red_Error "ERROR: Failed to download panel, please try install again!"
+        Red_Error "ERROR: Failed to prepare panel package, please try install again!"
     fi
     
     # wget --no-check-certificate -O /etc/init.d/bt ${download_Url}/install/src/bt7_en.init -t 5 -T 20
     # wget --no-check-certificate -O /www/server/panel/init.sh ${download_Url}/install/src/bt7_en.init -t 5 -T 20
-    wget --no-check-certificate -O /www/server/panel/install/public.sh ${download_Url}/install/public.sh -t 5 -T 20
+    if [ -z "${AAPANEL_REPO_URL}" ]; then
+        wget --no-check-certificate -O /www/server/panel/install/public.sh ${download_Url}/install/public.sh -t 5 -T 20
+    fi
 
     if [ -f "${setup_path}/server/panel/data/default.db" ]; then
         if [ -d "/${setup_path}/server/panel/old_data" ]; then
