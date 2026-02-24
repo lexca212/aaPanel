@@ -4939,15 +4939,7 @@ function messagebox() {
 			reader_message_list();
 		},
 		end: function () {
-			// 注册即送7天专业版授权和3年APP插件授权;  暂时注释注册赠送7天授权活动 4-20
-			var isLoginActivityShown = localStorage.getItem('loginActivityShown');
-			if (!isLoginActivityShown) {
-				bt.pub.get_user_info(function (udata) {
-					if (!udata.status) {
-						loginActivity();
-					}
-				});
-			}
+			// Disable forced aaPanel account login popup on task window close.
 		}
 	});
 }
