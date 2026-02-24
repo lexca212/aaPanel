@@ -205,8 +205,7 @@ menu_map = {
         'memuadatabase': '/database',     # Databases
         'memudocker': '/docker',          # Docker
         'memuacontrol': '/control',       # Monitor
-        'memuafirewall': '/firewall',     # Security
-        'memuasecurity2': '/security/firewall',  # Security2
+        'memuafirewall': '/security/firewall',     # Security
         'memuafiles': '/files',           # Files
         'menunode': '/node',              # Node Management
         'memualogs': '/logs',             # Logs
