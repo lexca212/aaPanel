@@ -1,0 +1,30 @@
+<div class="bt-form pd20" style="font-size:13px;">
+  <h3 style="margin-top:0;">Security Tools Plugin</h3>
+  <p style="color:#666;">Quick actions for SSH/System logs and Fail2Ban.</p>
+  <div style="margin:10px 0 16px 0;">
+    <button class="btn btn-default btn-sm" onclick="securityToolsPlugin.run('ssh_log')">SSH Log</button>
+    <button class="btn btn-default btn-sm" onclick="securityToolsPlugin.run('system_log')">System Log</button>
+    <button class="btn btn-default btn-sm" onclick="openPath('/var/log')">Open /var/log</button>
+  </div>
+  <div style="margin-bottom:16px;">
+    <button class="btn btn-success btn-sm" onclick="securityToolsPlugin.run('fail2ban_status')">Fail2Ban Status</button>
+    <button class="btn btn-success btn-sm" onclick="securityToolsPlugin.run('fail2ban_install')">Install/Enable Fail2Ban</button>
+    <button class="btn btn-warning btn-sm" onclick="securityToolsPlugin.run('fail2ban_disable')">Disable Fail2Ban</button>
+  </div>
+  <pre id="securityToolsPluginOutput" style="height:360px;background:#111;color:#f5f5f5;padding:10px;overflow:auto;"></pre>
+</div>
+<script>
+var securityToolsPlugin = {
+  run: function(action){
+    var output = document.getElementById('securityToolsPluginOutput');
+    output.textContent = 'Running ' + action + '...';
+    bt.send('security_tools_' + action, '/plugin?action=a&name=security_tools&s=' + action, {}, function(res){
+      if(typeof res === 'string'){
+        output.textContent = res;
+        return;
+      }
+      output.textContent = (res && res.msg) ? res.msg : JSON.stringify(res, null, 2);
+    });
+  }
+}
+</script>

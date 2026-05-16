@@ -1,0 +1,3 @@
+dist/*.zip
+security_tools_plugin/__pycache__/
+security_tools_plugin/*.pyc

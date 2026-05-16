@@ -1,0 +1,15 @@
+{
+  "name": "security_tools",
+  "title": "Security Tools",
+  "versions": "1.0",
+  "ps": "Quick SSH/System logs and Fail2Ban management",
+  "author": "Custom",
+  "home": "https://example.com",
+  "id": 10,
+  "type": 10,
+  "tip": "lib",
+  "display": 1,
+  "sort": 999,
+  "shell": "",
+  "checks": "/www/server/panel/plugin/security_tools/security_tools_main.py"
+}
